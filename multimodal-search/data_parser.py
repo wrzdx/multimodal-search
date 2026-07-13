@@ -429,8 +429,25 @@ def clean_dataset(
 # ------------------------------------------------------------------ #
 
 if __name__ == "__main__":
-    # Step 1a: Generate dirty dump
-    create_raw_dump()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Генерация и очистка данных")
+    parser.add_argument(
+        "--skip-generate", action="store_true",
+        help="Пропустить генерацию синтетики (использовать raw_strategies.jsonl от real_parser.py)",
+    )
+    parser.add_argument("--n", type=int, default=N_RECORDS, help="Количество записей для генерации")
+    args = parser.parse_args()
+
+    if args.skip_generate:
+        if not RAW_PATH.exists():
+            print(f"[data_parser] {RAW_PATH} не найден. Сначала запустите:")
+            print(f"  python real_parser.py")
+            raise SystemExit(1)
+        print(f"[data_parser] Пропуск генерации — используем реальный дамп из {RAW_PATH}")
+    else:
+        create_raw_dump(n=args.n)
+
     # Step 1b: Clean and save
     clean_dataset()
     print("[data_parser] All done.")
