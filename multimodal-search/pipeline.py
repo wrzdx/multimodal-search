@@ -261,25 +261,33 @@ class AllianceRetriever:
         self.bm25 = BM25Index()
         self.bm25.load(BM25_PATH)
 
-        # Load SPLADE Index (L05: Learned Sparse)
-        if not SPLADE_MATRIX_PATH.exists():
-            raise FileNotFoundError(f"SPLADE matrix not found. Run: python sparse_index.py")
-        self.splade = SPLADEIndex()
-        self.splade.load(SPLADE_MATRIX_PATH, doc_ids=self.df["id"].values)
+        # Load SPLADE Index (L05: Learned Sparse) — OPTIONAL
+        # Model is gated on HuggingFace; pipeline works without it.
+        self.splade = None
+        if SPLADE_MATRIX_PATH.exists():
+            try:
+                self.splade = SPLADEIndex()
+                self.splade.load(SPLADE_MATRIX_PATH, doc_ids=self.df["id"].values)
+                print(f"[Alliance] SPLADE loaded: {self.splade.sparse_matrix.shape[0]} docs.")
+            except Exception as e:
+                print(f"[Alliance] SPLADE unavailable ({e}). Using BM25 + Dense only.")
+                self.splade = None
+        else:
+            print("[Alliance] SPLADE matrix not found. Using BM25 + Dense only.")
+            print("[Alliance] For SPLADE: huggingface-cli login && python sparse_index.py")
 
         # Load Dense Indexes (L05: Dense Retrieval via FAISS)
         if not TEXT_INDEX_PATH.exists() or not CURVE_INDEX_PATH.exists():
             raise FileNotFoundError(f"FAISS indices not found. Run: python dense_index.py")
         self.dense_searcher = DenseIndexSearcher()
 
-        # Load The Captain (L08: LambdaMART)
+        # Load The Captain (L08: LambdaMART) — optional, trains on first search
         self.captain = TheCaptain()
         if CAPTAIN_MODEL_PATH.exists():
             self.captain.load(CAPTAIN_MODEL_PATH)
+            print("[Alliance] The Captain (LambdaMART) loaded.")
         else:
-            print("[Alliance] WARNING: Captain model not found. "
-                  "Training will be triggered on first search.")
-            self._train_captain()
+            print("[Alliance] Captain not found — will train on first search.")
 
         # Initialize CRAG Agent (L11)
         self.crag_agent = AgenticCRAG(self.df)
@@ -322,21 +330,27 @@ class AllianceRetriever:
         # ---- Phase 1: RECALL — RRF from 4 systems ----
         print("[Alliance] Phase 1: Recall (RRF)...")
         bm25_ids, bm25_scores = self.bm25.search(query, top_k=rrf_top_k)
-        splade_ids, splade_scores = self.splade.search(query, top_k=rrf_top_k)
-        dense_text_ids, dense_text_scores = self.dense_searcher.search_text(query, top_k=rrf_top_k)
 
-        # For curve search, use a reference curve (upward trending)
-        ref_curve = np.linspace(100, 120, 252).astype(np.float32)
-        dense_curve_ids, dense_curve_scores = self.dense_searcher.search_curve(ref_curve, top_k=rrf_top_k)
+        # Collect result lists for RRF (2-4 systems depending on availability)
+        rrf_inputs = [(bm25_ids, bm25_scores)]
+
+        if self.splade is not None:
+            splade_ids, splade_scores = self.splade.search(query, top_k=rrf_top_k)
+            rrf_inputs.append((splade_ids, splade_scores))
+
+        try:
+            dense_text_ids, dense_text_scores = self.dense_searcher.search_text(query, top_k=rrf_top_k)
+            rrf_inputs.append((dense_text_ids, dense_text_scores))
+
+            # For curve search, use a reference curve (upward trending)
+            ref_curve = np.linspace(100, 120, 252).astype(np.float32)
+            dense_curve_ids, dense_curve_scores = self.dense_searcher.search_curve(ref_curve, top_k=rrf_top_k)
+            rrf_inputs.append((dense_curve_ids, dense_curve_scores))
+        except Exception as e:
+            print(f"[Alliance] Dense search error ({e}), using sparse only.")
 
         # RRF Fusion (L02)
-        fused_ids, fused_scores = reciprocal_rank_fusion(
-            [
-                (bm25_ids, bm25_scores),
-                (splade_ids, splade_scores),
-                (dense_text_ids, dense_text_scores),
-                (dense_curve_ids, dense_curve_scores),
-            ],
+        fused_ids, fused_scores = reciprocal_rank_fusion(rrf_inputs,
             k=RRF_K,
             top_k=rrf_top_k,
         )
@@ -351,9 +365,22 @@ class AllianceRetriever:
             query_max_drawdown=max_drawdown,
         )
 
+        # If SPLADE scores are missing, fill with 0
+        if "splade_cos" not in features_df.columns:
+            features_df["splade_cos"] = 0.0
+        if "dense_text_cos" not in features_df.columns:
+            features_df["dense_text_cos"] = 0.0
+        if "dense_curve_cos" not in features_df.columns:
+            features_df["dense_curve_cos"] = 0.0
+
         # ---- Phase 3: PRECISION — The Captain (L08) ----
         print("[Alliance] Phase 3: The Captain reranking...")
-        reranked = self.captain.rerank(features_df)
+        try:
+            reranked = self.captain.rerank(features_df)
+        except Exception:
+            print("[Alliance] Captain not trained yet. Training now...")
+            self._train_captain()
+            reranked = self.captain.rerank(features_df)
 
         # ---- Phase 4: AGENTIC CRAG (L11) ----
         print("[Alliance] Phase 4: Agentic CRAG refinement...")

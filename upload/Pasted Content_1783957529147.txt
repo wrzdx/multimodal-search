@@ -1,0 +1,437 @@
+PS C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search> python real_parser.py                           
+============================================================
+  РЕАЛЬНЫЙ ПАРСЕР — Мультимодальный поиск стратегий
+  Источники: Wikipedia, GitHub API, Investopedia, Forex Factory, Custom URLs
+  Max pages/source: 50
+  Proxy: none
+============================================================
+
+============================================================
+[WIKI] Wikipedia — Trading Strategy Articles
+============================================================
+
+[WIKI/ru] 39 статей
+  [1/50] Технический_анализ...      [403 blocked] https://ru.wikipedia.org/wiki/Технический_анализ...
+  [1/50] Скользящая_средняя... [212639 chars]
+  [2/50] Индекс_относительной_силы... [45527 chars]
+  [3/50] MACD...      [403 blocked] https://ru.wikipedia.org/wiki/MACD...
+  [3/50] Стохастический_осциллятор...      [403 blocked] https://ru.wikipedia.org/wiki/Стохастический_осциллятор...
+  [3/50] Ленты_Боллинджера...      [403 blocked] https://ru.wikipedia.org/wiki/Ленты_Боллинджера...
+  [3/50] Параболическая_SAR...      [403 blocked] https://ru.wikipedia.org/wiki/Параболическая_SAR...
+  [3/50] Индекс_ADX...      [403 blocked] https://ru.wikipedia.org/wiki/Индекс_ADX...
+  [3/50] Свечной_анализ...      [403 blocked] https://ru.wikipedia.org/wiki/Свечной_анализ...
+  [3/50] Японские_свечи_(технический_анализ)...      [403 blocked] https://ru.wikipedia.org/wiki/Японские_свечи_(технический_анализ)...
+  [3/50] Уровни_поддержки_и_сопротивления...      [403 blocked] https://ru.wikipedia.org/wiki/Уровни_поддержки_и_сопротивления...
+  [3/50] Тренд_(рынок)...      [403 blocked] https://ru.wikipedia.org/wiki/Тренд_(рынок)...
+  [3/50] Фигуры_технического_анализа...      [403 blocked] https://ru.wikipedia.org/wiki/Фигуры_технического_анализа...
+  [3/50] Голова_и_плечи...      [403 blocked] https://ru.wikipedia.org/wiki/Голова_и_плечи...
+  [3/50] Волны_Эллиотта...      [403 blocked] https://ru.wikipedia.org/wiki/Волны_Эллиотта...
+  [3/50] Фибоначчи... [160380 chars]
+  [4/50] Геометрия_Фибоначчи...      [403 blocked] https://ru.wikipedia.org/wiki/Геометрия_Фибоначчи...
+  [4/50] Скользящая_средняя_Энгла—Гранжера...      [403 blocked] https://ru.wikipedia.org/wiki/Скользящая_средняя_Энгла—Гранжера...
+  [4/50] Средний_истинный_диапазон...      [403 blocked] https://ru.wikipedia.org/wiki/Средний_истинный_диапазон...
+  [4/50] Веер_Фибоначчи...      [403 blocked] https://ru.wikipedia.org/wiki/Веер_Фибоначчи...
+  [4/50] Торговая_система...      [403 blocked] https://ru.wikipedia.org/wiki/Торговая_система...
+  [4/50] Дейтрейдинг...      [403 blocked] https://ru.wikipedia.org/wiki/Дейтрейдинг...
+  [4/50] Скальпинг_(финансы)...      [403 blocked] https://ru.wikipedia.org/wiki/Скальпинг_(финансы)...
+  [4/50] Свинг-трейдинг...      [403 blocked] https://ru.wikipedia.org/wiki/Свинг-трейдинг...
+  [4/50] Позиционная_торговля...      [403 blocked] https://ru.wikipedia.org/wiki/Позиционная_торговля...
+  [4/50] Арбитраж...      [403 blocked] https://ru.wikipedia.org/wiki/Арбитраж...
+  [4/50] Парный_трейдинг... [118948 chars]
+  [5/50] Стратегия_пересечения_скользящих_средних...      [403 blocked] https://ru.wikipedia.org/wiki/Стратегия_пересечения_скользящих_средних...
+  [5/50] Канальный_трейдинг...      [403 blocked] https://ru.wikipedia.org/wiki/Канальный_трейдинг...
+  [5/50] Пробойная_стратегия...      [403 blocked] https://ru.wikipedia.org/wiki/Пробойная_стратегия...
+  [5/50] Рыночный_нейтралитет...      [403 blocked] https://ru.wikipedia.org/wiki/Рыночный_нейтралитет...
+  [5/50] Хеджирование...      [403 blocked] https://ru.wikipedia.org/wiki/Хеджирование...
+  [5/50] Модель_Блэка — Шоулза...      [403 blocked] https://ru.wikipedia.org/wiki/Модель_Блэка — Шоулза...
+  [5/50] Опцион_(финансы)...      [403 blocked] https://ru.wikipedia.org/wiki/Опцион_(финансы)...
+  [5/50] Волатильность_(финансы)...      [403 blocked] https://ru.wikipedia.org/wiki/Волатильность_(финансы)...
+  [5/50] Риск-менеджмент...      [403 blocked] https://ru.wikipedia.org/wiki/Риск-менеджмент...
+  [5/50] Мани-менеджмент...      [403 blocked] https://ru.wikipedia.org/wiki/Мани-менеджмент...
+  [5/50] Тейк-профит...      [403 blocked] https://ru.wikipedia.org/wiki/Тейк-профит...
+  [5/50] Стоп-лосс... [10817 chars]
+
+[WIKI/en] 38 статей
+  [6/50] Technical_analysis... [332743 chars]
+  [7/50] Moving_average_(finance)...      [403 blocked] https://en.wikipedia.org/wiki/Moving_average_(finance)...
+  [7/50] Relative_strength_index... [124127 chars]
+  [8/50] MACD... [74123 chars]
+  [9/50] Stochastic_oscillator...      [403 blocked] https://en.wikipedia.org/wiki/Stochastic_oscillator...
+  [9/50] Bollinger_Bands...      [403 blocked] https://en.wikipedia.org/wiki/Bollinger_Bands...
+  [9/50] Parabolic_SAR... [46458 chars]
+  [10/50] Average_directional_index...      [403 blocked] https://en.wikipedia.org/wiki/Average_directional_index...
+  [10/50] Candlestick_pattern...      [403 blocked] https://en.wikipedia.org/wiki/Candlestick_pattern...
+  [10/50] Support_and_resistance...      [403 blocked] https://en.wikipedia.org/wiki/Support_and_resistance...
+  [10/50] Market_trend... [267334 chars]
+  [11/50] Chart_pattern...      [403 blocked] https://en.wikipedia.org/wiki/Chart_pattern...
+  [11/50] Head_and_shoulders_(chart_pattern)...      [403 blocked] https://en.wikipedia.org/wiki/Head_and_shoulders_(chart_pattern)...
+  [11/50] Elliott_wave_principle... [101969 chars]
+  [12/50] Fibonacci_retracement...      [403 blocked] https://en.wikipedia.org/wiki/Fibonacci_retracement...
+  [12/50] Average_true_range...      [403 blocked] https://en.wikipedia.org/wiki/Average_true_range...
+  [12/50] Ichimoku_Kinko_Hyo...      [403 blocked] https://en.wikipedia.org/wiki/Ichimoku_Kinko_Hyo...
+  [12/50] Volume_(finance)... [54731 chars]
+  [13/50] Momentum_(finance)...      [403 blocked] https://en.wikipedia.org/wiki/Momentum_(finance)...
+  [13/50] Mean_reversion_(finance)... [51323 chars]
+  [14/50] Trading_strategy...      [403 blocked] https://en.wikipedia.org/wiki/Trading_strategy...
+  [14/50] Day_trading... [186932 chars]
+  [15/50] Scalping_(trading)...      [403 blocked] https://en.wikipedia.org/wiki/Scalping_(trading)...
+  [15/50] Swing_trading...      [403 blocked] https://en.wikipedia.org/wiki/Swing_trading...
+  [15/50] Position_trading...      [403 blocked] https://en.wikipedia.org/wiki/Position_trading...
+  [15/50] Arbitrage...      [403 blocked] https://en.wikipedia.org/wiki/Arbitrage...
+  [15/50] Pairs_trade...      [403 blocked] https://en.wikipedia.org/wiki/Pairs_trade...
+  [15/50] Algorithmic_trading...      [403 blocked] https://en.wikipedia.org/wiki/Algorithmic_trading...
+  [15/50] High-frequency_trading... [512904 chars]
+  [16/50] Backtesting... [47289 chars]
+  [17/50] Value_at_risk... [251750 chars]
+  [18/50] Sharpe_ratio... [133856 chars]
+  [19/50] Maximum_drawdown...      [403 blocked] https://en.wikipedia.org/wiki/Maximum_drawdown...
+  [19/50] Sortino_ratio...      [403 blocked] https://en.wikipedia.org/wiki/Sortino_ratio...
+  [19/50] Calmar_ratio... [23469 chars]
+  [20/50] Information_ratio...      [403 blocked] https://en.wikipedia.org/wiki/Information_ratio...
+  [20/50] Hedge_(finance)...      [403 blocked] https://en.wikipedia.org/wiki/Hedge_(finance)...
+  [20/50] Risk_management...      [403 blocked] https://en.wikipedia.org/wiki/Risk_management...
+
+[WIKI] Итого: 19 статей
+
+============================================================
+[GITHUB] GitHub API — Trading Strategy Repos
+============================================================
+  [search] "trading strategy python backtest..."      [403 blocked] https://api.github.com/search/repositories...
+ [failed]
+  [search] "forex strategy algorithmic..."      [403 blocked] https://api.github.com/search/repositories...
+ [failed]
+  [search] "crypto trading bot strategy..."      [403 blocked] https://api.github.com/search/repositories...
+ [failed]
+  [search] "stock trading strategy ML..."      [403 blocked] https://api.github.com/search/repositories...
+ [failed]
+  [search] "quantitative trading strategy..."      [403 blocked] https://api.github.com/search/repositories...
+ [failed]
+  [search] "mean reversion strategy..."      [403 blocked] https://api.github.com/search/repositories...
+ [failed]
+  [search] "momentum trading strategy..."      [403 blocked] https://api.github.com/search/repositories...
+ [failed]
+  [search] "pairs trading strategy..."      [403 blocked] https://api.github.com/search/repositories...
+ [failed]
+  [search] "arbitrage trading bot..."      [403 blocked] https://api.github.com/search/repositories...
+ [failed]
+  [search] "scalping strategy indicator..."      [403 blocked] https://api.github.com/search/repositories...
+ [failed]
+
+[GITHUB] Итого: 0 репозиториев
+
+============================================================
+[INV] Investopedia (may be blocked)
+============================================================
+  [1/20] OK (13425 chars)
+  [2/20]      [HTTP 404] https://www.investopedia.com/terms/d/day-trading.asp...
+  [3/20]      [HTTP 404] https://www.investopedia.com/terms/s/swing-trading.asp...
+  [4/20]      [HTTP 404] https://www.investopedia.com/terms/p/position-trading.asp...
+  [5/20]      [HTTP 404] https://www.investopedia.com/terms/c/carry-trade.asp...
+  [6/20]      [HTTP 404] https://www.investopedia.com/terms/m/momentum-trading.asp...
+  [7/20]      [HTTP 404] https://www.investopedia.com/terms/b/bollinger-bands.asp...
+  [8/20] OK (64007 chars)
+  [9/20] OK (45793 chars)
+  [10/20] OK (44920 chars)
+  [11/20]      [HTTP 404] https://www.investopedia.com/terms/s/support-level.asp...
+  [12/20]      [HTTP 404] https://www.investopedia.com/terms/r/resistance-level.asp...
+  [13/20]      [HTTP 404] https://www.investopedia.com/terms/f/fibonacci-retracement.asp...
+  [14/20] OK (33994 chars)
+  [15/20]      [HTTP 404] https://www.investopedia.com/articles/active-trading/072715/bollinger-bands-brea...
+  [16/20]      [HTTP 404] https://www.investopedia.com/articles/active-trading/072715/fibonacci-retracemen...
+  [17/20]      [HTTP 404] https://www.investopedia.com/articles/trading/09/adx-trend-indicator.asp...
+  [18/20]      [HTTP 404] https://www.investopedia.com/terms/s/sharpe-ratio.asp...
+  [19/20]      [HTTP 404] https://www.investopedia.com/terms/m/maximum-drawdown.asp...
+  [20/20]      [HTTP 404] https://www.investopedia.com/terms/r/risk-management.asp...
+
+[INV] Итого: 5 статей
+
+============================================================
+[FF] Forex Factory Forum (may be blocked)
+============================================================
+      [403 blocked] https://www.forexfactory.com/forum/28-trading-systems/...
+[FF] Форум недоступен. Пропускаем.
+      Совет: --sources wiki,github — работают без проблем.
+
+[!] Ошибка Custom URLs: scrape_custom() got an unexpected keyword argument 'max_pages'
+Traceback (most recent call last):
+  File "C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\real_parser.py", line 743, in run_all
+    recs = fn(session, max_pages=max_pages)
+TypeError: scrape_custom() got an unexpected keyword argument 'max_pages'
+
+============================================================
+ИТОГО: 24 записей из реальных источников
+
+Сохранено: C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\raw_strategies.jsonl
+  С метриками: 24/24
+  Ср. размер:  123311 символов
+  Кривые:      0 (всё реконструируется через GBM)
+
+Далее:
+  python data_parser.py --skip-generate
+PS C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search> python data_parser.py --skip-generate
+[data_parser] Пропуск генерации — используем реальный дамп из C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\raw_strategies.jsonl
+[data_parser] Reading dirty data from C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\raw_strategies.jsonl...
+[data_parser] Loaded 24 raw records.
+[data_parser] Cleaning text (BeautifulSoup)...
+[data_parser] Parsing metrics (regex)...
+[data_parser] Parsing / reconstructing equity curves (GBM)...
+[data_parser]  Reconstructed 24 missing curves via GBM.
+[data_parser] Clean dataset saved to C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\clean_strategies.parquet
+[data_parser]  Shape: (24, 6)
+[data_parser]  Sharpe  — mean: 1.68, std: 0.96
+[data_parser]  Drawdown — mean: -15.30
+[data_parser]  Return   — mean: 17.20
+[data_parser] All done.
+PS C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search> python sparse_index.py
+Loaded 24 documents from C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\clean_strategies.parquet
+[BM25] Tokenizing corpus for Inverted Index...
+[BM25] Building BM25 index...
+[BM25] Index built on 24 documents.
+[BM25] Saved to bm25_index.pkl
+
+[BM25] Query: 'трендовая стратегия пробой SMA'
+  1. Doc 3 (score: 5.5371): Парный трейдинг У этого термина существуют и другие значения, см. Парный . Парны...
+  2. Doc 22 (score: 3.0057): Moving Average (MA): Purpose, Uses, Formula, and Examples Definition Technical t...
+  3. Doc 0 (score: 2.9822): Скользящая средняя У этого термина существуют и другие значения, см. Скользящая ...
+  4. Doc 6 (score: 2.4945): Relative strength index Indicator in technical analysis RSI may also refer to Re...
+  5. Doc 21 (score: 1.4629): What Is MACD? Definition The MACD indicator is a technical analysis tool used to...
+[SPLADE] Loading model: nreimers/splade-cocondenser-ense...
+Traceback (most recent call last):
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\utils\_http.py", line 761, in hf_raise_for_status
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '401 Unauthorized' for url 'https://huggingface.co/nreimers/splade-cocondenser-ense/resolve/main/config.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\utils\hub.py", line 422, in cached_files
+    hf_hub_download(
+    ~~~~~~~~~~~~~~~^
+        path_or_repo_id,
+        ^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        tqdm_class=tqdm_class,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\utils\_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\file_download.py", line 997, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+        # Destination
+    ...<15 lines>...
+        dry_run=dry_run,
+    )
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\file_download.py", line 1148, in _hf_hub_download_to_cache_dir
+    _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\file_download.py", line 1782, in _raise_on_head_call_error
+    raise head_call_error
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\file_download.py", line 1669, in _get_metadata_or_catch_error
+    metadata = get_hf_file_metadata(
+        url=url,
+    ...<4 lines>...
+        retry_on_errors=retry_on_errors,
+    )
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\utils\_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\file_download.py", line 1591, in get_hf_file_metadata
+    response = _httpx_follow_relative_redirects_with_backoff(
+        method="HEAD", url=url, headers=hf_headers, timeout=timeout, retry_on_errors=retry_on_errors
+    )
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\utils\_http.py", line 692, in _httpx_follow_relative_redirects_with_backoff
+    hf_raise_for_status(response)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\utils\_http.py", line 835, in hf_raise_for_status
+    raise _format(RepositoryNotFoundError, message, response, repo_type=repo_type, repo_id=repo_id) from e
+huggingface_hub.errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-6a550764-6735064d4451fd3612e4fdff;4d7c80c5-9c5c-4570-b543-23f1525a1340)
+
+Repository Not Found for url: https://huggingface.co/nreimers/splade-cocondenser-ense/resolve/main/config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated and your token has the required permissions.
+For more details, see https://huggingface.co/docs/huggingface_hub/authentication
+Invalid username or password.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\models\auto\tokenization_auto.py", line 684, in from_pretrained
+    config = AutoConfig.from_pretrained(
+        pretrained_model_name_or_path, trust_remote_code=trust_remote_code, **kwargs
+    )
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\models\auto\configuration_auto.py", line 1483, in from_pretrained
+    config_dict, unused_kwargs = PreTrainedConfig.get_config_dict(pretrained_model_name_or_path, **kwargs)
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\configuration_utils.py", line 670, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+                          ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\configuration_utils.py", line 725, in _get_config_dict
+    resolved_config_file = cached_file(
+        pretrained_model_name_or_path,
+    ...<9 lines>...
+        _commit_hash=commit_hash,
+    )
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\utils\hub.py", line 278, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\utils\hub.py", line 454, in cached_files
+    raise OSError(
+    ...<4 lines>...
+    ) from e
+OSError: nreimers/splade-cocondenser-ense is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `hf auth login` or by passing `token=<your_token>`
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\utils\_http.py", line 761, in hf_raise_for_status
+    response.raise_for_status()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\httpx\_models.py", line 829, in raise_for_status
+    raise HTTPStatusError(message, request=request, response=self)
+httpx.HTTPStatusError: Client error '401 Unauthorized' for url 'https://huggingface.co/nreimers/splade-cocondenser-ense/resolve/main/config.json'
+For more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/401
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\utils\hub.py", line 422, in cached_files
+    hf_hub_download(
+    ~~~~~~~~~~~~~~~^
+        path_or_repo_id,
+        ^^^^^^^^^^^^^^^^
+    ...<10 lines>...
+        tqdm_class=tqdm_class,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\utils\_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\file_download.py", line 997, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+        # Destination
+    ...<15 lines>...
+        dry_run=dry_run,
+    )
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\file_download.py", line 1148, in _hf_hub_download_to_cache_dir
+    _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\file_download.py", line 1782, in _raise_on_head_call_error
+    raise head_call_error
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\file_download.py", line 1669, in _get_metadata_or_catch_error
+    metadata = get_hf_file_metadata(
+        url=url,
+    ...<4 lines>...
+        retry_on_errors=retry_on_errors,
+    )
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\utils\_validators.py", line 88, in _inner_fn
+    return fn(*args, **kwargs)
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\file_download.py", line 1591, in get_hf_file_metadata
+    response = _httpx_follow_relative_redirects_with_backoff(
+        method="HEAD", url=url, headers=hf_headers, timeout=timeout, retry_on_errors=retry_on_errors
+    )
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\utils\_http.py", line 692, in _httpx_follow_relative_redirects_with_backoff
+    hf_raise_for_status(response)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\utils\_http.py", line 835, in hf_raise_for_status
+    raise _format(RepositoryNotFoundError, message, response, repo_type=repo_type, repo_id=repo_id) from e
+huggingface_hub.errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-6a550764-1b11dd440676e228662745ec;ac1ca7fc-4b26-477a-a825-9b85fa151338)
+
+Repository Not Found for url: https://huggingface.co/nreimers/splade-cocondenser-ense/resolve/main/config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated and your token has the required permissions.
+For more details, see https://huggingface.co/docs/huggingface_hub/authentication
+Invalid username or password.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\sparse_index.py", line 271, in <module>
+    splade = SPLADEIndex()
+  File "C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\sparse_index.py", line 115, in __init__
+    self.tokenizer = AutoTokenizer.from_pretrained(model_name)
+                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\models\auto\tokenization_auto.py", line 688, in from_pretrained
+    config = PreTrainedConfig.from_pretrained(pretrained_model_name_or_path, **kwargs)
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\configuration_utils.py", line 629, in from_pretrained
+    config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
+                          ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\configuration_utils.py", line 670, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+                          ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\configuration_utils.py", line 725, in _get_config_dict
+    resolved_config_file = cached_file(
+        pretrained_model_name_or_path,
+    ...<9 lines>...
+        _commit_hash=commit_hash,
+    )
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\utils\hub.py", line 278, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\transformers\utils\hub.py", line 454, in cached_files
+    raise OSError(
+    ...<4 lines>...
+    ) from e
+OSError: nreimers/splade-cocondenser-ense is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `hf auth login` or by passing `token=<your_token>`
+PS C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search> python train.py
+[train] Device: cpu
+[train] Loading clean data...
+[train] Loading BM25 index for hard negative mining...
+[train] Creating training dataset...
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+modules.json: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 349/349 [00:00<00:00, 979kB/s]
+C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\huggingface_hub\file_download.py:138: UserWarning: `huggingface_hub` cache-system uses symlinks by default to efficiently store duplicated files but your machine does not support them in C:\Users\Innopolis\.cache\huggingface\hub\models--sentence-transformers--all-MiniLM-L6-v2. Caching files will still work but in a degraded version that might require more space on your disk. This warning can be disabled by setting the `HF_HUB_DISABLE_SYMLINKS_WARNING` environment variable. For more details, see https://huggingface.co/docs/huggingface_hub/how-to-cache#limitations.
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+  warnings.warn(message)
+config_sentence_transformers.json: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 116/116 [00:00<00:00, 466kB/s]
+README.md: 10.5kB [00:00, 23.3MB/s]
+sentence_bert_config.json: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████| 53.0/53.0 [00:00<00:00, 224kB/s]
+Loading weights: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 103/103 [00:00<00:00, 4870.28it/s]
+BertModel LOAD REPORT from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:   can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+config.json: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 190/190 [00:00<00:00, 766kB/s]
+C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\models.py:238: FutureWarning: The `get_sentence_embedding_dimension` method has been renamed to `get_embedding_dimension`.
+  self.proj = ProjectionHead(input_dim=self.encoder.get_sentence_embedding_dimension(),
+[train] Loading Cross-encoder Teacher (Judge) for Margin-MSE...
+Loading weights: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 105/105 [00:00<00:00, 3601.14it/s]
+BertForSequenceClassification LOAD REPORT from: cross-encoder/ms-marco-MiniLM-L-6-v2
+Key                          | Status     |  | 
+-----------------------------+------------+--+-
+bert.embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:   can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+
+[train] Starting training for 3 epochs...
+Epoch 1/3:   0%|                                                                                                                                        | 0/1 [00:00<?, ?it/s]
+Traceback (most recent call last):
+  File "C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\train.py", line 398, in <module>
+    curve_enc, text_enc = train(distill=True, epochs=EPOCHS)
+                          ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\train.py", line 287, in train
+    for batch in pbar:
+                 ^^^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\tqdm\std.py", line 1181, in __iter__
+    for obj in iterable:
+               ^^^^^^^^
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\torch\utils\data\dataloader.py", line 741, in __next__
+    data = self._next_data()
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\torch\utils\data\dataloader.py", line 801, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "C:\Users\Innopolis\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\torch\utils\data\_utils\fetch.py", line 54, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+            ~~~~~~~~~~~~^^^^^
+  File "C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\train.py", line 114, in __getitem__
+    neg_idx = self._find_hard_negative(idx)
+  File "C:\Users\Innopolis\Documents\workspace-7ff5df56-e6de-4350-8025-8236017b7263 (1)\multimodal-search\train.py", line 93, in _find_hard_negative
+    ids, _ = self.bm25.search(query_text, top_k=20)
+             ^^^^^^^^^^^^^^^^
+AttributeError: 'BM25Okapi' object has no attribute 'search'

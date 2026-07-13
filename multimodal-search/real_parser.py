@@ -27,6 +27,7 @@ Output: raw_strategies.jsonl в формате, ожидаемом clean_dataset
 """
 
 import json
+import os
 import re
 import time
 import random
@@ -79,6 +80,11 @@ def _create_session(proxy: Optional[str] = None) -> requests.Session:
 
     if proxy:
         session.proxies = {"http": proxy, "https": proxy}
+
+    # GitHub auth (optional — increases rate limit from 10 to 5000 req/hr)
+    gh_token = os.environ.get("GITHUB_TOKEN")
+    if gh_token:
+        session.headers["Authorization"] = f"Bearer {gh_token}"
 
     return session
 
@@ -419,6 +425,14 @@ def scrape_github(session: requests.Session, max_pages: int = 50) -> List[Dict]:
             print(" [not json]")
             continue
 
+        # Check for API rate limit
+        if "message" in data and "rate limit" in data.get("message", "").lower():
+            print(" [rate limited]")
+            print("[GITHUB] Rate limited. Set GITHUB_TOKEN env var for higher limits:")
+            print("         set GITHUB_TOKEN=ghp_xxxx  (or export on Linux)")
+            print("         Get token: https://github.com/settings/tokens")
+            break
+
         items = data.get("items", [])
         print(f" → {len(items)} repos")
 
@@ -486,28 +500,28 @@ def scrape_investopedia(session: requests.Session, max_pages: int = 30) -> List[
     records = []
     seen = set()
 
-    # Сначала попробуем получить sitemap или индекс
+    # Investopedia articles — use slug-based URLs that work with redirects
+    # Old /terms/x/name.asp format partially 404'd — use articles/ paths that are stable
     urls = [
+        "https://www.investopedia.com/articles/active-trading/062315/which-order-types-offer-most-flexibility.asp",
+        "https://www.investopedia.com/articles/active-trading/072715/bollinger-bands-breakdown.asp",
+        "https://www.investopedia.com/articles/active-trading/072715/fibonacci-retracement-breakdown.asp",
+        "https://www.investopedia.com/articles/active-trading/062315/relative-strength-index-rsi.asp",
+        "https://www.investopedia.com/articles/technical/02/091802.asp",
+        "https://www.investopedia.com/articles/trading/08/moving-average-envelope.asp",
         "https://www.investopedia.com/terms/s/scalping.asp",
-        "https://www.investopedia.com/terms/d/day-trading.asp",
-        "https://www.investopedia.com/terms/s/swing-trading.asp",
-        "https://www.investopedia.com/terms/p/position-trading.asp",
-        "https://www.investopedia.com/terms/c/carry-trade.asp",
-        "https://www.investopedia.com/terms/m/momentum-trading.asp",
-        "https://www.investopedia.com/terms/b/bollinger-bands.asp",
+        "https://www.investopedia.com/terms/b/bollingerbands.asp",
         "https://www.investopedia.com/terms/r/rsi.asp",
         "https://www.investopedia.com/terms/m/macd.asp",
         "https://www.investopedia.com/terms/m/movingaverage.asp",
-        "https://www.investopedia.com/terms/s/support-level.asp",
-        "https://www.investopedia.com/terms/r/resistance-level.asp",
-        "https://www.investopedia.com/terms/f/fibonacci-retracement.asp",
-        "https://www.investopedia.com/terms/i/ichimoku-cloud.asp",
-        "https://www.investopedia.com/articles/active-trading/072715/bollinger-bands-breakdown.asp",
-        "https://www.investopedia.com/articles/active-trading/072715/fibonacci-retracement-breakdown.asp",
-        "https://www.investopedia.com/articles/trading/09/adx-trend-indicator.asp",
+        "https://www.investopedia.com/terms/a/adx.asp",
         "https://www.investopedia.com/terms/s/sharpe-ratio.asp",
+        "https://www.investopedia.com/terms/v/value-at-risk-var.asp",
+        "https://www.investopedia.com/terms/t/technical-analysis.asp",
         "https://www.investopedia.com/terms/m/maximum-drawdown.asp",
-        "https://www.investopedia.com/terms/r/risk-management.asp",
+        "https://www.investopedia.com/terms/m/momentum.asp",
+        "https://www.investopedia.com/terms/p/pairs-trade.asp",
+        "https://www.investopedia.com/terms/a/arbitrage.asp",
     ]
 
     urls = urls[:max_pages]
@@ -641,7 +655,8 @@ def scrape_forex_factory(session: requests.Session, max_pages: int = 30) -> List
 # ============================================================ #
 
 def scrape_custom(session: requests.Session,
-                  filepath: Path = CUSTOM_URLS_PATH) -> List[Dict]:
+                  filepath: Path = CUSTOM_URLS_PATH,
+                  max_pages: int = 100) -> List[Dict]:
     """Парсинг URL из custom_urls.txt (один URL на строку, # — комментарий)."""
     if not filepath.exists():
         print(f"\n[CUSTOM] {filepath} не найден. Создайте файл:")

@@ -249,6 +249,12 @@ class SPLADEIndex:
 # ------------------------------------------------------------------ #
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--skip-splade", action="store_true",
+                        help="Skip SPLADE (requires HuggingFace auth for gated model)")
+    args = parser.parse_args()
+
     # Load clean data
     df = pd.read_parquet(CLEAN_PATH)
     texts = df["text"].tolist()
@@ -265,16 +271,26 @@ if __name__ == "__main__":
     ids, scores = bm25.search(query, top_k=5)
     print(f"\n[BM25] Query: '{query}'")
     for i, (doc_id, score) in enumerate(zip(ids, scores)):
-        print(f"  {i+1}. Doc {doc_id} (score: {score:.4f}): {texts[doc_id][:80]}...")
+        print(f"  {i+1}. Doc {doc_id} (score: {score:.4f}): {texts[int(doc_id)][:80]}...")
 
-    # Build SPLADE Index
-    splade = SPLADEIndex()
-    splade.build(texts, doc_ids)
+    # Build SPLADE Index (optional — model is gated, requires `huggingface-cli login`)
+    if not args.skip_splade:
+        try:
+            splade = SPLADEIndex()
+            splade.build(texts, doc_ids)
 
-    # Test SPLADE search
-    ids, scores = splade.search(query, top_k=5)
-    print(f"\n[SPLADE] Query: '{query}'")
-    for i, (doc_id, score) in enumerate(zip(ids, scores)):
-        print(f"  {i+1}. Doc {doc_id} (score: {score:.4f}): {texts[doc_id][:80]}...")
+            # Test SPLADE search
+            ids, scores = splade.search(query, top_k=5)
+            print(f"\n[SPLADE] Query: '{query}'")
+            for i, (doc_id, score) in enumerate(zip(ids, scores)):
+                print(f"  {i+1}. Doc {doc_id} (score: {score:.4f}): {texts[int(doc_id)][:80]}...")
+        except OSError as e:
+            print(f"\n[SPLADE] Не удалось загрузить модель: {e}")
+            print("[SPLADE] Решения:")
+            print("  1. huggingface-cli login   (ввести токен с huggingface.co/settings/tokens)")
+            print("  2. Принять лицензию: https://huggingface.co/nreimers/splade-cocondenser-ense")
+            print("  3. Или запустите с --skip-splade (пайплайн будет работать с BM25 + Dense)")
+    else:
+        print("\n[SPLADE] Пропущен (--skip-splade)")
 
     print("\n[sparse_index] All done.")

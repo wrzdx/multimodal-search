@@ -236,19 +236,26 @@ def train(distill: bool = True,
     print("[train] Loading clean data...")
     df = pd.read_parquet(CLEAN_PATH)
 
-    # Load BM25 for hard negative mining
+    # Load BM25 for hard negative mining (use BM25Index wrapper, not raw BM25Okapi)
     print("[train] Loading BM25 index for hard negative mining...")
-    import pickle
-    with open(BM25_PATH, "rb") as f:
-        bm25_data = pickle.load(f)
-    bm25_index = bm25_data["bm25"]
+    from sparse_index import BM25Index as BM25IndexWrapper
+    bm25_wrapper = BM25IndexWrapper()
+    bm25_wrapper.load(BM25_PATH)
+    bm25_index = bm25_wrapper
 
     # Create dataset
     print("[train] Creating training dataset...")
     dataset = TripletDataset(df, bm25_index)
+    # Adaptive batch size: must be <= dataset size
+    actual_batch = min(BATCH_SIZE, len(df))
+    print(f"[train]  Dataset: {len(df)} samples, batch_size: {actual_batch}")
+    if len(df) < 4:
+        print("[train] ERROR: Too few samples for training. Need at least 4.")
+        print("[train] Generate more data: python real_parser.py --sources wiki --max-pages 100")
+        return None, None
     dataloader = DataLoader(
         dataset,
-        batch_size=BATCH_SIZE,
+        batch_size=actual_batch,
         shuffle=True,
         collate_fn=collate_fn,
         num_workers=0,

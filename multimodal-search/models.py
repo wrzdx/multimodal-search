@@ -235,7 +235,7 @@ class TrainableTextEncoder(nn.Module):
         super().__init__()
         self.encoder = SentenceTransformer(model_name)
         self.transformer = self.encoder[0].auto_model  # get the base transformer
-        self.proj = ProjectionHead(input_dim=self.encoder.get_sentence_embedding_dimension(),
+        self.proj = ProjectionHead(input_dim=self.encoder.get_embedding_dimension(),
                                    output_dim=proj_dim)
         # Freeze transformer
         for param in self.transformer.parameters():
