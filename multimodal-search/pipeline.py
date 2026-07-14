@@ -14,14 +14,20 @@ AllianceRetriever:
   4. Agentic CRAG: refine_query() adjusts results based on user feedback
      (e.g., slider "Drawdown < 15%" triggers post-retrieval filtering and
      re-scoring, per L11 CRAG logic).
+
+Iteration 1 (Baseline): Individual retrieval systems (BM25, SPLADE, Dense Text, Dense Curve)
+Iteration 2 (Full Alliance): RRF fusion + LambdaMART + Agentic CRAG
+See evaluate.py for comparative study.
 """
 
+import time
 import numpy as np
 import pandas as pd
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional
 from scipy import sparse as sp
 import pickle
+from datetime import datetime
 
 from sparse_index import BM25Index, SPLADEIndex
 from dense_index import DenseIndexSearcher
@@ -36,6 +42,7 @@ SPLADE_MATRIX_PATH = _SCRIPT_DIR / "splade_sparse_matrix.npz"
 TEXT_INDEX_PATH = _SCRIPT_DIR / "faiss_text.index"
 CURVE_INDEX_PATH = _SCRIPT_DIR / "faiss_curve.index"
 CAPTAIN_MODEL_PATH = _SCRIPT_DIR / "captain_lgbm.txt"
+EXPERIMENTS_LOG_PATH = _SCRIPT_DIR / "experiments_log.jsonl"
 
 # RRF constant (L02)
 RRF_K = 60
@@ -294,6 +301,21 @@ class AllianceRetriever:
 
         print("[Alliance] All systems online.\n")
 
+    def _log_search_phase(self, query: str, metrics: dict):
+        """Append per-search timing/candidate-count to experiments_log.jsonl."""
+        import json
+        entry = {
+            "timestamp": datetime.now().isoformat(),
+            "step": "alliance_search",
+            "metrics": metrics,
+            "notes": f"Query: {query[:80]}",
+        }
+        try:
+            with open(EXPERIMENTS_LOG_PATH, "a", encoding="utf-8") as f:
+                f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        except Exception:
+            pass  # logging is best-effort
+
     def _train_captain(self):
         """Train The Captain if no pre-trained model exists."""
         from ltr_captain import generate_training_data
@@ -329,6 +351,7 @@ class AllianceRetriever:
 
         # ---- Phase 1: RECALL — RRF from 4 systems ----
         print("[Alliance] Phase 1: Recall (RRF)...")
+        t_recall_start = time.time()
         bm25_ids, bm25_scores = self.bm25.search(query, top_k=rrf_top_k)
 
         # Collect result lists for RRF (2-4 systems depending on availability)
@@ -354,10 +377,12 @@ class AllianceRetriever:
             k=RRF_K,
             top_k=rrf_top_k,
         )
+        t_recall_elapsed = time.time() - t_recall_start
         print(f"[Alliance]  RRF returned {len(fused_ids)} unique candidates.")
 
         # ---- Phase 2: FEATURE EXTRACTION (L09) ----
         print("[Alliance] Phase 2: Feature extraction...")
+        t_feat_start = time.time()
         features_df = extract_features(
             query, fused_ids, self.df,
             self.bm25, self.splade, self.dense_searcher,
@@ -372,19 +397,34 @@ class AllianceRetriever:
             features_df["dense_text_cos"] = 0.0
         if "dense_curve_cos" not in features_df.columns:
             features_df["dense_curve_cos"] = 0.0
+        t_feat_elapsed = time.time() - t_feat_start
 
         # ---- Phase 3: PRECISION — The Captain (L08) ----
         print("[Alliance] Phase 3: The Captain reranking...")
+        t_captain_start = time.time()
         try:
             reranked = self.captain.rerank(features_df)
         except Exception:
             print("[Alliance] Captain not trained yet. Training now...")
             self._train_captain()
             reranked = self.captain.rerank(features_df)
+        t_captain_elapsed = time.time() - t_captain_start
 
         # ---- Phase 4: AGENTIC CRAG (L11) ----
         print("[Alliance] Phase 4: Agentic CRAG refinement...")
+        t_crag_start = time.time()
         refined = self.crag_agent.refine_query(reranked, min_sharpe, max_drawdown)
+        t_crag_elapsed = time.time() - t_crag_start
+
+        # ---- Log timing to experiments_log.jsonl ----
+        self._log_search_phase(query, {
+            "n_rrf_candidates": len(fused_ids),
+            "recall_latency_ms": round(t_recall_elapsed * 1000, 1),
+            "feature_latency_ms": round(t_feat_elapsed * 1000, 1),
+            "captain_latency_ms": round(t_captain_elapsed * 1000, 1),
+            "crag_latency_ms": round(t_crag_elapsed * 1000, 1),
+            "total_latency_ms": round((t_recall_elapsed + t_feat_elapsed + t_captain_elapsed + t_crag_elapsed) * 1000, 1),
+        })
 
         # ---- Assemble final results ----
         final_results = []

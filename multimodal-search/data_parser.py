@@ -11,6 +11,10 @@ This module:
      missing equity curves via Geometric Brownian Motion calibrated to
      total_return and max_drawdown.
   3. Saves clean dataset to clean_strategies.parquet.
+
+Dataset Size Justification:
+  50,000 records covers sufficient variance of strategy types, indicators,
+  timeframes, and metric distributions to represent the strategy search domain.
 """
 
 import json
@@ -31,7 +35,7 @@ np.random.seed(SEED)
 _SCRIPT_DIR = Path(__file__).parent
 RAW_PATH = _SCRIPT_DIR / "raw_strategies.jsonl"
 CLEAN_PATH = _SCRIPT_DIR / "clean_strategies.parquet"
-N_RECORDS = 5000
+N_RECORDS = 50000  # PDF Guideline: Minimum 50,000 objects required
 CURVE_LEN = 252  # ~1 year of daily data
 
 # ------------------------------------------------------------------ #
