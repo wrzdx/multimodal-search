@@ -23,6 +23,10 @@ node_modules
 # misc
 .DS_Store
 *.pem
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
 
 # debug
 npm-debug.log*

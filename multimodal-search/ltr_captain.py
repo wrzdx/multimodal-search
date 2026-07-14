@@ -51,7 +51,7 @@ def extract_features(
     candidate_ids: np.ndarray,
     df: pd.DataFrame,
     bm25_index: BM25Index,
-    splade_index: SPLADEIndex,
+    splade_index: Optional[SPLADEIndex],
     dense_searcher: DenseIndexSearcher,
     query_sharpe: Optional[float] = None,
     query_max_drawdown: Optional[float] = None,
@@ -92,9 +92,11 @@ def extract_features(
     bm25_scores = bm25_index.search(query, top_k=len(candidate_ids))
     bm25_score_map = dict(zip(bm25_scores[0].astype(int), bm25_scores[1]))
 
-    # ---- SPLADE scores ----
-    splade_scores = splade_index.search(query, top_k=len(candidate_ids))
-    splade_score_map = dict(zip(splade_scores[0].astype(int), splade_scores[1]))
+    # ---- SPLADE scores (optional — model gated on HuggingFace, L05) ----
+    splade_score_map: Dict[int, float] = {}
+    if splade_index is not None:
+        splade_scores = splade_index.search(query, top_k=len(candidate_ids))
+        splade_score_map = dict(zip(splade_scores[0].astype(int), splade_scores[1]))
 
     # ---- Dense text scores ----
     dense_text_ids, dense_text_scores = dense_searcher.search_text(query, top_k=len(candidate_ids))
@@ -153,7 +155,7 @@ def extract_features(
 def generate_training_data(
     df: pd.DataFrame,
     bm25_index: BM25Index,
-    splade_index: SPLADEIndex,
+    splade_index: Optional[SPLADEIndex],
     dense_searcher: DenseIndexSearcher,
     n_queries: int = 500,
     top_k: int = 50,
