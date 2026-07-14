@@ -56,3 +56,15 @@ prompt
 server.log
 # Skills directory
 /skills/
+# Multimodal Search: downloaded/generated data and search artifacts
+/multimodal-search/raw_strategies*.jsonl
+/multimodal-search/clean_strategies.parquet
+/multimodal-search/*_embeddings.npy
+/multimodal-search/hard_negatives_cache.npy
+/multimodal-search/faiss_*.index
+/multimodal-search/bm25_index.pkl
+/multimodal-search/splade_vocab.pkl
+/multimodal-search/splade_sparse_matrix.npz
+# Local presentation drafts; the final PPTX/PDF are committed explicitly
+/presentation/build_presentation_*.js
+/presentation/multimodal-search-defense-*

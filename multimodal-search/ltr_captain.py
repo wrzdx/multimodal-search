@@ -102,10 +102,15 @@ def extract_features(
     dense_text_ids, dense_text_scores = dense_searcher.search_text(query, top_k=len(candidate_ids))
     dense_text_map = dict(zip(dense_text_ids.astype(int), dense_text_scores))
 
-    # ---- Dense curve scores (use median curve as query if no specific curve provided) ----
-    # Use a generic "upward trending" curve as query
+    # ---- Dense curve scores (use reference curve as query baseline) ----
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     curve_enc = dense_searcher.curve_encoder
+
+    # Pre-compute reference "upward trending" curve embedding (once, outside the loop)
+    ref_curve = np.linspace(100, 120, 252).astype(np.float32)
+    with torch.no_grad():
+        ref_tensor = torch.tensor(ref_curve).unsqueeze(0).to(device)
+        ref_emb = curve_enc(ref_tensor).cpu().numpy()[0]
 
     for doc_id in candidate_ids:
         doc_id = int(doc_id)
@@ -120,16 +125,13 @@ def extract_features(
         # Dense text cosine
         dense_text_score = dense_text_map.get(doc_id, 0.0)
 
-        # Dense curve cosine — compute similarity between candidate curve and query curve
-        # For text-only queries, we use a neutral upward-trending curve
+        # Dense curve cosine — compute similarity against the reference "upward trending" curve
         candidate_curve = np.array(row["equity_curve"], dtype=np.float32)
         with torch.no_grad():
             c_tensor = torch.tensor(candidate_curve).unsqueeze(0).to(device)
             c_emb = curve_enc(c_tensor).cpu().numpy()[0]
-        # Cosine similarity with itself (max) — we'll use a reference curve instead
-        # Actually, for a text query, we score against a reference "good" curve
-        # The feature here represents how "curve-like" the candidate is
-        dense_curve_score = 0.5  # neutral default for text-only queries
+            # Both are L2-normalized, so dot product = cosine similarity
+            dense_curve_score = float(np.dot(ref_emb, c_emb))
 
         # Metric differences (user preference alignment)
         diff_sharpe = abs(row["sharpe"] - query_sharpe)

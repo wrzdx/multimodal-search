@@ -282,7 +282,9 @@ def main():
     st.caption(
         "Мультимодальный поиск стратегий | Deep Learning for Search | "
         "BM25 · SPLADE · Bi-encoder · Cross-encoder · InfoNCE · "
-        "Margin-MSE · RRF · LambdaMART · Agentic CRAG · RAGAS/Faithfulness"
+        "Margin-MSE · RRF · LambdaMART · Agentic CRAG · RAGAS/Faithfulness\n"
+        "Evaluation: NDCG@k, MRR, Recall@k, Precision@k | "
+        "Comparative Study: 8 approaches benchmarked"
     )
 
 
