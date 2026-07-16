@@ -99,9 +99,9 @@ The comparative study writes metrics and hardware profiling results to `experime
 streamlit run app.py
 ```
 
-Then run the project itself using^
+Then run the project itself using:
 ```bash
-streamlit streamlit run app.py
+streamlit run app.py
 ```
 
 ## Generated files not committed to Git
