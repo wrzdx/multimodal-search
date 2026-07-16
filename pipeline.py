@@ -288,13 +288,19 @@ class AllianceRetriever:
             raise FileNotFoundError(f"FAISS indices not found. Run: python dense_index.py")
         self.dense_searcher = DenseIndexSearcher()
 
-        # Load The Captain (L08: LambdaMART) — optional, trains on first search
+        # Load The Captain (L08: LambdaMART) — optional
         self.captain = TheCaptain()
+        self._captain_ready = False
         if CAPTAIN_MODEL_PATH.exists():
-            self.captain.load(CAPTAIN_MODEL_PATH)
-            print("[Alliance] The Captain (LambdaMART) loaded.")
+            try:
+                self.captain.load(CAPTAIN_MODEL_PATH)
+                self._captain_ready = True
+                print("[Alliance] The Captain (LambdaMART) loaded.")
+            except Exception:
+                print("[Alliance] Captain файл повреждён — поиск работает через RRF.")
         else:
-            print("[Alliance] Captain not found — will train on first search.")
+            print("[Alliance] Captain не найден — поиск работает через RRF.")
+            print("[Alliance] Для переранжирования LambdaMART запустите: python train_captain.py")
 
         # Initialize CRAG Agent (L11)
         self.crag_agent = AgenticCRAG(self.df)
@@ -318,12 +324,21 @@ class AllianceRetriever:
 
     def _train_captain(self):
         """Train The Captain if no pre-trained model exists."""
+        import time as _t
         from ltr_captain import generate_training_data
+        print("\n[Alliance] ╔══════════════════════════════════════════════════════════╗")
+        print("[Alliance] ║  The Captain (LambdaMART) не найден — обучаем...         ║")
+        print("[Alliance] ║  Это произойдёт ОДИН раз, модель сохранится на диск.     ║")
+        print("[Alliance] ╚══════════════════════════════════════════════════════════╝\n")
+        t0 = _t.time()
         train_df, groups = generate_training_data(
             self.df, self.bm25, self.splade, self.dense_searcher,
-            n_queries=300, top_k=50,
+            n_queries=100, top_k=50,
         )
         self.captain.train(train_df, groups)
+        elapsed = _t.time() - t0
+        print(f"\n[Alliance] Captain обучен за {elapsed:.1f}s. Модель сохранена — "
+              f"повторный запуск будет мгновенным.\n")
 
     def search(
         self,
@@ -400,14 +415,22 @@ class AllianceRetriever:
         t_feat_elapsed = time.time() - t_feat_start
 
         # ---- Phase 3: PRECISION — The Captain (L08) ----
-        print("[Alliance] Phase 3: The Captain reranking...")
         t_captain_start = time.time()
-        try:
-            reranked = self.captain.rerank(features_df)
-        except Exception:
-            print("[Alliance] Captain not trained yet. Training now...")
-            self._train_captain()
-            reranked = self.captain.rerank(features_df)
+        if self._captain_ready:
+            print("[Alliance] Phase 3: The Captain reranking...")
+            try:
+                reranked = self.captain.rerank(features_df)
+            except Exception:
+                reranked = features_df.copy()
+                reranked["captain_score"] = fused_scores[np.searchsorted(fused_ids, reranked["doc_id"].values.astype(int).tolist(), sorter=None)]
+        else:
+            # Captain not trained — use RRF scores as captain_score
+            print("[Alliance] Phase 3: skipped (Captain not trained, using RRF scores)")
+            reranked = features_df.copy()
+            # Map RRF scores to candidates
+            rrf_map = dict(zip(fused_ids.astype(int), fused_scores))
+            reranked["captain_score"] = reranked["doc_id"].map(rrf_map).fillna(0).values
+            reranked = reranked.sort_values("captain_score", ascending=False).reset_index(drop=True)
         t_captain_elapsed = time.time() - t_captain_start
 
         # ---- Phase 4: AGENTIC CRAG (L11) ----

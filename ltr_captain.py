@@ -21,6 +21,7 @@ import lightgbm as lgb
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional
 import pickle
+from tqdm import tqdm
 
 from sparse_index import BM25Index, SPLADEIndex, simple_tokenize
 from dense_index import DenseIndexSearcher
@@ -46,6 +47,37 @@ FEATURE_NAMES = [
 # Feature Extraction
 # ------------------------------------------------------------------ #
 
+def _batch_curve_cosine(dense_searcher: DenseIndexSearcher,
+                         candidate_ids: np.ndarray,
+                         batch_size: int = 512) -> Dict[int, float]:
+    """
+    Compute curve cosine similarity for all candidates in batches.
+
+    Uses FAISS index.reconstruct() to get pre-computed embeddings
+    (O(1) per document, NO GPU encoding needed).
+    """
+    ref_curve = np.linspace(100, 120, 252).astype(np.float32)
+    with torch.no_grad():
+        ref_tensor = torch.tensor(ref_curve).unsqueeze(0).to(dense_searcher.device)
+        ref_emb = dense_searcher.curve_encoder(ref_tensor).cpu().numpy()[0]
+
+    curve_index = dense_searcher.curve_index
+    scores_map: Dict[int, float] = {}
+    n = len(candidate_ids)
+
+    for start in range(0, n, batch_size):
+        batch_ids = candidate_ids[start:start + batch_size]
+        # Use pre-computed embeddings from FAISS index (instant, no GPU)
+        embs = np.vstack([
+            curve_index.reconstruct(int(doc_id)) for doc_id in batch_ids
+        ])  # (batch, 128)
+        cos_sims = embs @ ref_emb  # (batch,)
+        for doc_id, sim in zip(batch_ids, cos_sims):
+            scores_map[int(doc_id)] = float(sim)
+
+    return scores_map
+
+
 def extract_features(
     query: str,
     candidate_ids: np.ndarray,
@@ -66,19 +98,6 @@ def extract_features(
       4. dense_curve_cos — Dense curve encoder cosine similarity
       5. diff_sharpe — |candidate_sharpe - user_desired_sharpe|
       6. diff_drawdown — |candidate_drawdown - user_desired_drawdown|
-
-    Args:
-        query: user query text
-        candidate_ids: array of document IDs (candidates from RRF)
-        df: full clean dataframe
-        bm25_index: BM25 index
-        splade_index: SPLADE index
-        dense_searcher: DenseIndexSearcher
-        query_sharpe: user's desired min Sharpe (optional)
-        query_max_drawdown: user's desired max Drawdown (optional)
-
-    Returns:
-        DataFrame with one row per candidate, columns = feature names
     """
     # Default user preferences to corpus median
     if query_sharpe is None:
@@ -86,13 +105,11 @@ def extract_features(
     if query_max_drawdown is None:
         query_max_drawdown = df["max_drawdown"].median()
 
-    features_list = []
-
     # ---- BM25 scores ----
     bm25_scores = bm25_index.search(query, top_k=len(candidate_ids))
     bm25_score_map = dict(zip(bm25_scores[0].astype(int), bm25_scores[1]))
 
-    # ---- SPLADE scores (optional — model gated on HuggingFace, L05) ----
+    # ---- SPLADE scores (optional) ----
     splade_score_map: Dict[int, float] = {}
     if splade_index is not None:
         splade_scores = splade_index.search(query, top_k=len(candidate_ids))
@@ -102,49 +119,26 @@ def extract_features(
     dense_text_ids, dense_text_scores = dense_searcher.search_text(query, top_k=len(candidate_ids))
     dense_text_map = dict(zip(dense_text_ids.astype(int), dense_text_scores))
 
-    # ---- Dense curve scores (use reference curve as query baseline) ----
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    curve_enc = dense_searcher.curve_encoder
+    # ---- Dense curve scores (pre-computed from FAISS, NO GPU) ----
+    curve_score_map = _batch_curve_cosine(dense_searcher, candidate_ids)
 
-    # Pre-compute reference "upward trending" curve embedding (once, outside the loop)
-    ref_curve = np.linspace(100, 120, 252).astype(np.float32)
-    with torch.no_grad():
-        ref_tensor = torch.tensor(ref_curve).unsqueeze(0).to(device)
-        ref_emb = curve_enc(ref_tensor).cpu().numpy()[0]
+    # ---- Build features (pure numpy, no GPU) ----
+    n = len(candidate_ids)
+    doc_ids_int = candidate_ids.astype(int)
+    sharpes = df.iloc[doc_ids_int]["sharpe"].values
+    drawdowns = df.iloc[doc_ids_int]["max_drawdown"].values
 
-    for doc_id in candidate_ids:
-        doc_id = int(doc_id)
-        row = df.iloc[doc_id]
-
-        # BM25 score (default 0 if not in top-k)
-        bm25_score = bm25_score_map.get(doc_id, 0.0)
-
-        # SPLADE cosine
-        splade_score = splade_score_map.get(doc_id, 0.0)
-
-        # Dense text cosine
-        dense_text_score = dense_text_map.get(doc_id, 0.0)
-
-        # Dense curve cosine — compute similarity against the reference "upward trending" curve
-        candidate_curve = np.array(row["equity_curve"], dtype=np.float32)
-        with torch.no_grad():
-            c_tensor = torch.tensor(candidate_curve).unsqueeze(0).to(device)
-            c_emb = curve_enc(c_tensor).cpu().numpy()[0]
-            # Both are L2-normalized, so dot product = cosine similarity
-            dense_curve_score = float(np.dot(ref_emb, c_emb))
-
-        # Metric differences (user preference alignment)
-        diff_sharpe = abs(row["sharpe"] - query_sharpe)
-        diff_drawdown = abs(row["max_drawdown"] - query_max_drawdown)
-
+    features_list = []
+    for i in range(n):
+        did = int(doc_ids_int[i])
         features_list.append({
-            "doc_id": doc_id,
-            "bm25_score": bm25_score,
-            "splade_cos": splade_score,
-            "dense_text_cos": dense_text_score,
-            "dense_curve_cos": dense_curve_score,
-            "diff_sharpe": diff_sharpe,
-            "diff_drawdown": diff_drawdown,
+            "doc_id": did,
+            "bm25_score": bm25_score_map.get(did, 0.0),
+            "splade_cos": splade_score_map.get(did, 0.0),
+            "dense_text_cos": dense_text_map.get(did, 0.0),
+            "dense_curve_cos": curve_score_map.get(did, 0.0),
+            "diff_sharpe": abs(sharpes[i] - query_sharpe),
+            "diff_drawdown": abs(drawdowns[i] - query_max_drawdown),
         })
 
     return pd.DataFrame(features_list)
@@ -159,53 +153,37 @@ def generate_training_data(
     bm25_index: BM25Index,
     splade_index: Optional[SPLADEIndex],
     dense_searcher: DenseIndexSearcher,
-    n_queries: int = 500,
+    n_queries: int = 100,
     top_k: int = 50,
-) -> Tuple[pd.DataFrame, pd.DataFrame]:
+) -> Tuple[pd.DataFrame, List[int]]:
     """
     Generate LTR training data with pseudo-labels.
-
-    For each of n_queries random documents (used as "queries"):
-      1. Retrieve top-k candidates via RRF from all 4 systems.
-      2. Extract features.
-      3. Pseudo-label: relevance = normalized Sharpe (higher Sharpe = more relevant).
-
-    Returns:
-        train_features, train_labels
+    Uses pre-computed FAISS embeddings for fast feature extraction.
     """
     print(f"[Captain] Generating {n_queries} training queries...")
     all_features = []
-    all_groups = []  # group sizes for LightGBM ranking
+    all_groups = []
 
     query_indices = np.random.choice(len(df), size=min(n_queries, len(df)), replace=False)
 
-    for q_idx in query_indices:
+    for q_idx in tqdm(query_indices, desc="[Captain] Queries", ncols=80):
         query_text = df.iloc[q_idx]["text"]
         query_sharpe = df.iloc[q_idx]["sharpe"]
         query_dd = df.iloc[q_idx]["max_drawdown"]
 
-        # Get candidates from BM25
         bm25_ids, _ = bm25_index.search(query_text, top_k=top_k)
-
-        # Union of candidates from all systems
-        candidate_ids = list(set(bm25_ids.tolist()))
-        np.random.shuffle(candidate_ids)
-        candidate_ids = np.array(candidate_ids[:top_k])
+        candidate_ids = np.array(list(set(bm25_ids.tolist()))[:top_k])
 
         if len(candidate_ids) == 0:
             continue
 
-        # Extract features
         feats = extract_features(
             query_text, candidate_ids, df,
             bm25_index, splade_index, dense_searcher,
             query_sharpe, query_dd,
         )
 
-        # Pseudo-labels: relevance based on Sharpe ratio (0-4 scale for LambdaMART)
-        # Higher Sharpe = higher relevance
-        sharpes = df.iloc[candidate_ids]["sharpe"].values
-        # Normalize to 0-4
+        sharpes = df.iloc[candidate_ids.astype(int)]["sharpe"].values
         if sharpes.max() > sharpes.min():
             relevance = ((sharpes - sharpes.min()) / (sharpes.max() - sharpes.min()) * 4).astype(int)
         else:
@@ -318,9 +296,6 @@ class TheCaptain:
         return features_df
 
 
-# ------------------------------------------------------------------ #
-# MAIN
-# ------------------------------------------------------------------ #
 
 if __name__ == "__main__":
     # This requires pre-built indices
