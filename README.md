@@ -52,16 +52,9 @@ pip install -r requirements.txt
 
 Run all commands from the `multimodal-search` directory.
 
-### 1. Collect at least 50,000 real documents
+### 1. Collect at least 500,000 real documents
 
 The fastest default source is Hugging Face datasets:
-
-```bash
-python real_parser.py --sources hf --target 50000
-python data_parser.py --skip-generate
-```
-
-Additional supported sources can be combined as a comma-separated list:
 
 ```bash
 python real_parser.py --sources hf,arxiv,openalex --target 500000
@@ -71,6 +64,7 @@ python data_parser.py --skip-generate
 This creates `raw_strategies.jsonl` and `clean_strategies.parquet`. Network availability and upstream rate limits affect collection time. Do not use `--skip-generate` unless `raw_strategies.jsonl` already exists.
 
 ### 2. Build the sparse index
+Because we do not have token for SPLADE
 ```bash
 python sparse_index.py --skip-splade
 ```
