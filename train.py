@@ -27,12 +27,12 @@ import torch
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 import numpy as np
-import pandas as pd
 from pathlib import Path
 from tqdm import tqdm
 import time
 
 from models import CurveEncoder, TrainableTextEncoder
+import pandas as pd
 
 # Paths
 _SCRIPT_DIR = Path(__file__).parent

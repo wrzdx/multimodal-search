@@ -64,14 +64,13 @@ python data_parser.py --skip-generate
 Additional supported sources can be combined as a comma-separated list:
 
 ```bash
-python real_parser.py --sources hf,arxiv,openalex --target 50000
+python real_parser.py --sources hf,arxiv,openalex --target 500000
 python data_parser.py --skip-generate
 ```
 
 This creates `raw_strategies.jsonl` and `clean_strategies.parquet`. Network availability and upstream rate limits affect collection time. Do not use `--skip-generate` unless `raw_strategies.jsonl` already exists.
 
 ### 2. Build the sparse index
-
 ```bash
 python sparse_index.py --skip-splade
 ```
@@ -87,7 +86,7 @@ python train.py
 For a shorter diagnostic run:
 
 ```bash
-python train.py --epochs 1
+python train.py --epochs 3
 ```
 
 Training produces `curve_encoder.pth` and `text_proj_head.pth`. The full run can take hours on CPU.
@@ -110,6 +109,11 @@ The comparative study writes metrics and hardware profiling results to `experime
 
 ```bash
 streamlit run app.py
+```
+
+Then run the project itself using^
+```bash
+streamlit streamlit run app.py
 ```
 
 ## Generated files not committed to Git
