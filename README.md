@@ -91,15 +91,9 @@ Training produces `curve_encoder.pth` and `text_proj_head.pth`. The full run can
 python dense_index.py
 ```
 
-### 5. Evaluate
-
-```bash
-python evaluate.py
-```
-
 The comparative study writes metrics and hardware profiling results to `experiments_log.jsonl`.
 
-### 6. Launch the interface
+### 5. Launch the interface
 
 ```bash
 streamlit run app.py
